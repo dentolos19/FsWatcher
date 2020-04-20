@@ -1,6 +1,7 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using FsWatcher.Core;
 using Ookii.Dialogs.Wpf;
 
 namespace FsWatcher.Graphics
@@ -22,7 +23,7 @@ namespace FsWatcher.Graphics
                 return;
             }
             var directories = LbDirectories.Items.OfType<string>().ToArray();
-            new WnWatching(directories).Show();
+            new WnWatch(directories).Show();
             Close();
         }
 
@@ -50,10 +51,19 @@ namespace FsWatcher.Graphics
                 return;
             var items = e.Data.GetData(DataFormats.FileDrop) as string[];
             foreach (var item in items)
-            {
-                if (File.GetAttributes(item) == FileAttributes.Directory)
+                if (Utilities.IsFileDirectory(item))
                     LbDirectories.Items.Add(item);
-            }
+        }
+
+        private void CheckForUpdates(object sender, RoutedEventArgs e)
+        {
+            if (!Utilities.IsUserOnline())
+                return;
+            if (!Utilities.IsUpdateAvailable())
+                return;
+            var result = MessageBox.Show("Update is available! Do you want to visit the download page?", "FsWatcher", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+                Process.Start("https://github.com/dentolos19/FsWatcher/releases");
         }
 
     }

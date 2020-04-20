@@ -1,19 +1,21 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Windows;
 using FsWatcher.Core.Models;
-using Ookii.Dialogs.Wpf;
+using Microsoft.Win32;
 
 namespace FsWatcher.Graphics
 {
 
-    public partial class WnWatching
+    public partial class WnWatch
     {
 
+        private bool _isClosing;
         private List<ActivityItem> _activites;
         private readonly FileSystemWatcher[] _watchers;
 
-        public WnWatching(IEnumerable<string> directories)
+        public WnWatch(IEnumerable<string> directories)
         {
             var watchers = new List<FileSystemWatcher>();
             foreach (var item in directories)
@@ -23,7 +25,7 @@ namespace FsWatcher.Graphics
                     Path = item,
                     IncludeSubdirectories = true,
                 };
-                watcher.Created += delegate(object sender, FileSystemEventArgs e)
+                watcher.Created += delegate (object sender, FileSystemEventArgs e)
                 {
                     var activityItem = new ActivityItem(e.FullPath, ActivityType.Created);
                     _activites.Add(activityItem);
@@ -32,16 +34,16 @@ namespace FsWatcher.Graphics
                         LvActivities.Items.Add(activityItem);
                     });
                 };
-                watcher.Changed += delegate(object sender, FileSystemEventArgs e)
+                watcher.Changed += delegate (object sender, FileSystemEventArgs e)
                 {
-                    var activityItem = new ActivityItem(e.FullPath, ActivityType.Changed);
+                    var activityItem = new ActivityItem(e.FullPath, ActivityType.Modified);
                     _activites.Add(activityItem);
                     Dispatcher.Invoke(() =>
                     {
                         LvActivities.Items.Add(activityItem);
                     });
                 };
-                watcher.Renamed += delegate(object sender, RenamedEventArgs e)
+                watcher.Renamed += delegate (object sender, RenamedEventArgs e)
                 {
                     var activityItem = new ActivityItem(e.FullPath, ActivityType.Renamed);
                     _activites.Add(activityItem);
@@ -50,7 +52,7 @@ namespace FsWatcher.Graphics
                         LvActivities.Items.Add(activityItem);
                     });
                 };
-                watcher.Deleted += delegate(object sender, FileSystemEventArgs e)
+                watcher.Deleted += delegate (object sender, FileSystemEventArgs e)
                 {
                     var activityItem = new ActivityItem(e.FullPath, ActivityType.Deleted);
                     _activites.Add(activityItem);
@@ -79,7 +81,7 @@ namespace FsWatcher.Graphics
             var result = MessageBox.Show("Do you want to save activities into file?", "FsWatcher", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                var dialog = new VistaSaveFileDialog
+                var dialog = new SaveFileDialog
                 {
                     Filter = "FsWatcher Activity Log|*.log"
                 };
@@ -90,7 +92,14 @@ namespace FsWatcher.Graphics
                         writer.WriteLine($"{item.Type}: {item.Path} @ {item.Time}");
                 }
             }
-            Close();
+            if (!_isClosing)
+                Close();
+        }
+
+        private void ClosingStop(object sender, CancelEventArgs e)
+        {
+            _isClosing = true;
+            Stop(null, null);
         }
 
     }
