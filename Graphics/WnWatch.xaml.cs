@@ -12,6 +12,7 @@ namespace FsWatcher.Graphics
     {
 
         private bool _isClosing;
+        private bool _isSaved;
         private List<ActivityItem> _activites;
         private readonly FileSystemWatcher[] _watchers;
 
@@ -92,12 +93,15 @@ namespace FsWatcher.Graphics
                         writer.WriteLine($"{item.Type}: {item.Path} @ {item.Time}");
                 }
             }
+            _isSaved = true;
             if (!_isClosing)
                 Close();
         }
 
         private void ClosingStop(object sender, CancelEventArgs e)
         {
+            if (_isSaved)
+                return;
             _isClosing = true;
             Stop(null, null);
         }
