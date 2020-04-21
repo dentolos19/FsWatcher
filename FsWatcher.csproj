@@ -11,7 +11,15 @@
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\AssemblyKey.snk</AssemblyOriginatorKeyFile>
     <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
+    <Version>1.0.1</Version>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Properties\PublishProfiles\**" />
+    <EmbeddedResource Remove="Properties\PublishProfiles\**" />
+    <None Remove="Properties\PublishProfiles\**" />
+    <Page Remove="Properties\PublishProfiles\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <None Remove=".gitattributes" />
