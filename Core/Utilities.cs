@@ -24,7 +24,7 @@ namespace FsWatcher.Core
             var data =
                 client.DownloadString("https://raw.githubusercontent.com/dentolos19/FsWatcher/master/VERSION");
             client.Dispose();
-            return Version.Parse(data) < Assembly.GetExecutingAssembly().GetName().Version;
+            return Version.Parse(data) > Assembly.GetExecutingAssembly().GetName().Version;
         }
 
         public static bool IsFileDirectory(string path)
