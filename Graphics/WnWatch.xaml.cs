@@ -11,56 +11,41 @@ namespace FsWatcher.Graphics
     public partial class WnWatch
     {
 
+        private readonly FileSystemWatcher[] _watchers;
+        private List<ActivityItem> _activites;
+
         private bool _isClosing;
         private bool _isSaved;
-        private List<ActivityItem> _activites;
-        private readonly FileSystemWatcher[] _watchers;
 
         public WnWatch(IEnumerable<string> directories)
         {
             var watchers = new List<FileSystemWatcher>();
             foreach (var item in directories)
             {
-                var watcher = new FileSystemWatcher
-                {
-                    Path = item,
-                    IncludeSubdirectories = true,
-                };
-                watcher.Created += delegate (object sender, FileSystemEventArgs e)
+                var watcher = new FileSystemWatcher { Path = item, IncludeSubdirectories = true };
+                watcher.Created += delegate(object sender, FileSystemEventArgs e)
                 {
                     var activityItem = new ActivityItem(e.FullPath, ActivityType.Created);
                     _activites.Add(activityItem);
-                    Dispatcher.Invoke(() =>
-                    {
-                        LvActivities.Items.Add(activityItem);
-                    });
+                    Dispatcher.Invoke(() => { LvActivities.Items.Add(activityItem); });
                 };
-                watcher.Changed += delegate (object sender, FileSystemEventArgs e)
+                watcher.Changed += delegate(object sender, FileSystemEventArgs e)
                 {
                     var activityItem = new ActivityItem(e.FullPath, ActivityType.Modified);
                     _activites.Add(activityItem);
-                    Dispatcher.Invoke(() =>
-                    {
-                        LvActivities.Items.Add(activityItem);
-                    });
+                    Dispatcher.Invoke(() => { LvActivities.Items.Add(activityItem); });
                 };
-                watcher.Renamed += delegate (object sender, RenamedEventArgs e)
+                watcher.Renamed += delegate(object sender, RenamedEventArgs e)
                 {
                     var activityItem = new ActivityItem(e.FullPath, ActivityType.Renamed);
                     _activites.Add(activityItem);
-                    Dispatcher.Invoke(() =>
-                    {
-                        LvActivities.Items.Add(activityItem);
-                    });
+                    Dispatcher.Invoke(() => { LvActivities.Items.Add(activityItem); });
                 };
-                watcher.Deleted += delegate (object sender, FileSystemEventArgs e)
+                watcher.Deleted += delegate(object sender, FileSystemEventArgs e)
                 {
                     var activityItem = new ActivityItem(e.FullPath, ActivityType.Deleted);
                     _activites.Add(activityItem);
-                    Dispatcher.Invoke(() =>
-                    {
-                        LvActivities.Items.Add(activityItem);
-                    });
+                    Dispatcher.Invoke(() => { LvActivities.Items.Add(activityItem); });
                 };
                 watchers.Add(watcher);
             }
@@ -82,10 +67,7 @@ namespace FsWatcher.Graphics
             var result = MessageBox.Show("Do you want to save activities into file?", "FsWatcher", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                var dialog = new SaveFileDialog
-                {
-                    Filter = "FsWatcher Activity Log|*.log"
-                };
+                var dialog = new SaveFileDialog { Filter = "FsWatcher Activity Log|*.log" };
                 if (dialog.ShowDialog() == true)
                 {
                     using var writer = new StreamWriter(dialog.FileName);

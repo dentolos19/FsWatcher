@@ -21,8 +21,7 @@ namespace FsWatcher.Core
         public static bool IsUpdateAvailable()
         {
             var client = new WebClient();
-            var data =
-                client.DownloadString("https://raw.githubusercontent.com/dentolos19/FsWatcher/master/VERSION");
+            var data = client.DownloadString("https://raw.githubusercontent.com/dentolos19/FsWatcher/master/VERSION");
             client.Dispose();
             return Version.Parse(data) > Assembly.GetExecutingAssembly().GetName().Version;
         }
