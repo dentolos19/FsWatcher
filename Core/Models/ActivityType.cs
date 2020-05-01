@@ -7,7 +7,7 @@
         Created,
         Modified,
         Renamed,
-        Deleted
+        Removed
 
     }
 

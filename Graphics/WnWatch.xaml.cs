@@ -43,7 +43,7 @@ namespace FsWatcher.Graphics
                 };
                 watcher.Deleted += delegate(object sender, FileSystemEventArgs e)
                 {
-                    var activityItem = new ActivityItem(e.FullPath, ActivityType.Deleted);
+                    var activityItem = new ActivityItem(e.FullPath, ActivityType.Removed);
                     _activites.Add(activityItem);
                     Dispatcher.Invoke(() => { LvActivities.Items.Add(activityItem); });
                 };
@@ -72,7 +72,7 @@ namespace FsWatcher.Graphics
                 {
                     using var writer = new StreamWriter(dialog.FileName);
                     foreach (var item in _activites)
-                        writer.WriteLine($"{item.Type}: {item.Path} @ {item.Time}");
+                        writer.WriteLine($"[{item.Time}] {item.Type}: {item.Path}");
                 }
             }
             _isSaved = true;
