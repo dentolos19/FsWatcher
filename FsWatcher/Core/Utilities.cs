@@ -11,7 +11,7 @@ namespace FsWatcher.Core
         {
             var accents = new[] {"Red", "Green", "Blue", "Purple", "Orange", "Lime", "Emerald", "Teal", "Cyan", "Cobalt", "Indigo", "Violet", "Pink", "Magenta", "Crimson", "Amber", "Yellow", "Brown", "Olive", "Steel", "Mauve", "Taupe", "Sienna"};
             var random = new Random();
-            return accents[random.Next(accents.Length + 1)];
+            return accents[random.Next(accents.Length)];
         }
 
         public static void SetAppTheme(string accent)

@@ -4,7 +4,7 @@
     public enum ActivityType
     {
 
-        Created,
+        Added,
         Modified,
         Renamed,
         Removed
