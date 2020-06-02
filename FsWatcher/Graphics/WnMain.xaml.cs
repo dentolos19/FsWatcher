@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -43,11 +44,11 @@ namespace FsWatcher.Graphics
             var directories = LbDirectories.Items.OfType<string>();
             var isDuplicate = false;
             foreach (var directory in directories)
-                if (path.StartsWith(directory))
+                if (string.Equals(directory, path, StringComparison.CurrentCultureIgnoreCase))
                     isDuplicate = true;
             if (isDuplicate)
             {
-                MessageBox.Show("This directory or parent directory is already added to the list!", "FsWatcher", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show("This directory is already added to the list!", "FsWatcher", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                 return;
             }
             LbDirectories.Items.Add(path);
