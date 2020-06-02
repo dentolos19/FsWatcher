@@ -1,22 +1,22 @@
-﻿<Window x:Class="FsWatcher.Graphics.WnMain" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="FsWatcher" ResizeMode="NoResize"
-    SizeToContent="WidthAndHeight" Loaded="CheckForUpdates">
-    <DockPanel Width="500">
-        <DockPanel DockPanel.Dock="Top" Height="50" Background="WhiteSmoke">
-            <Image DockPanel.Dock="Left" Source="/Resources/Icon.ico" Width="30" Margin="10,10,0,10"/>
-            <Button DockPanel.Dock="Right" Content="Start" Width="50" Margin="0,10,10,10" Click="Start"/>
-            <Label Content="FsWatcher v1.0.3" Margin="10,10,10,10" FontSize="16" VerticalContentAlignment="Center"/>
+﻿<mahApps:MetroWindow x:Class="FsWatcher.Graphics.WnMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mahApps="http://metro.mahapps.com/winfx/xaml/controls"
+        Title="FsWatcher" Width="500" Height="300">
+    <DockPanel>
+        <DockPanel DockPanel.Dock="Top" Height="50" Background="#FF444444">
+            <Image DockPanel.Dock="Left" Margin="10,10,10,10" Source="/Resources/Logo.png" Width="30"/>
+            <Button DockPanel.Dock="Right" Margin="10,10,10,10" Content="Exit" Width="75" Click="Exit"/>
+            <Button x:Name="BnStart" DockPanel.Dock="Right" Margin="10,10,0,10" IsEnabled="False" Content="Start" Width="75" Click="Start"/>
+            <Label Margin="0,10,0,10" Content="FsWatcher" VerticalContentAlignment="Center"/>
         </DockPanel>
-        <StackPanel>
-            <DockPanel Background="WhiteSmoke">
-                <StackPanel DockPanel.Dock="Left" Width="100">
-                    <Label Content="Directories" Margin="10,0,10,10" HorizontalContentAlignment="Center"/>
-                    <Button Content="Add" Margin="10,0,10,10" Height="25" Click="AddDirectory"/>
-                    <Button Content="Remove" Margin="10,0,10,10" Height="25" Click="RemoveDirectory"/>
-                    <Button Content="Clear" Margin="10,0,10,10" Height="25" Click="ClearDirectories"/>
-                </StackPanel>
-                <ListBox x:Name="LbDirectories" AllowDrop="True" Drop="DropDirectory"/>
-            </DockPanel>
-        </StackPanel>
+        <DockPanel>
+            <StackPanel DockPanel.Dock="Left" Width="100">
+                <Button Margin="10,10,10,0" Content="Add" Click="Add"/>
+                <Button x:Name="BnRemove" Margin="10,10,10,0" Content="Remove" IsEnabled="False" Click="Remove"/>
+                <Button x:Name="BnClear" Margin="10,10,10,0" Content="Clear" IsEnabled="False" Click="Clear"/>
+            </StackPanel>
+            <ListBox x:Name="LbDirectories" AllowDrop="True" SelectionChanged="DirUpdate" Drop="DirDrop"/>
+        </DockPanel>
     </DockPanel>
-</Window>
+</mahApps:MetroWindow>

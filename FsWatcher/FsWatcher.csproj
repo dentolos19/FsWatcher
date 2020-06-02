@@ -2,41 +2,29 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netcoreapp5.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <StartupObject>FsWatcher.App</StartupObject>
     <Authors>Dennise Catolos</Authors>
+    <Company>Aprodots</Company>
     <Copyright>Copyright © 2020</Copyright>
-    <NeutralLanguage>en</NeutralLanguage>
+    <Version>1.1.0</Version>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Properties\AssemblyKey.snk</AssemblyOriginatorKeyFile>
     <ApplicationIcon>Resources\Icon.ico</ApplicationIcon>
-    <Version>1.0.3</Version>
-    <Company>Arprodots</Company>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Properties\PublishProfiles\**" />
-    <EmbeddedResource Remove="Properties\PublishProfiles\**" />
-    <None Remove="Properties\PublishProfiles\**" />
-    <Page Remove="Properties\PublishProfiles\**" />
+    <None Remove="Resources\Logo.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove=".gitattributes" />
-    <None Remove=".gitignore" />
-    <None Remove="LICENSE" />
-    <None Remove="README.md" />
-    <None Remove="Resources\Icon.ico" />
-    <None Remove="VERSION" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="MahApps.Metro" Version="2.0.0" />
     <PackageReference Include="Ookii.Dialogs.Wpf.NETCore" Version="2.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Icon.ico" />
+    <Resource Include="Resources\Logo.png" />
   </ItemGroup>
 
 </Project>

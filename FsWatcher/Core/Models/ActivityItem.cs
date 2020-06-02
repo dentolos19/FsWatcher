@@ -6,18 +6,11 @@ namespace FsWatcher.Core.Models
     public class ActivityItem
     {
 
-        public ActivityItem(string path, ActivityType type)
-        {
-            Path = path;
-            Type = type;
-            Time = DateTime.Now;
-        }
+        public string Location { get; set; }
 
-        public string Path { get; }
+        public ActivityType Type { get; set; }
 
-        public ActivityType Type { get; }
-
-        public DateTime Time { get; }
+        public DateTime Time { get; } = DateTime.Now;
 
     }
 

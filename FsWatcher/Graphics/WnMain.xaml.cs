@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.IO;
 using System.Linq;
 using System.Windows;
-using FsWatcher.Core;
+using System.Windows.Controls;
 using Ookii.Dialogs.Wpf;
 
 namespace FsWatcher.Graphics
@@ -15,55 +15,77 @@ namespace FsWatcher.Graphics
             InitializeComponent();
         }
 
-        private void Start(object sender, RoutedEventArgs e)
+        private void Start(object sender, RoutedEventArgs args)
         {
-            if (LbDirectories.Items.Count == 0)
-            {
-                MessageBox.Show("You need to add input directories before starting!", "FsWatcher");
+            if (BnStart.IsEnabled == false)
                 return;
-            }
-            var directories = LbDirectories.Items.OfType<string>().ToArray();
-            new WnWatch(directories).Show();
+            var directories = LbDirectories.Items.OfType<string>();
+            new WnWatch(directories.ToArray()).Show();
             Close();
         }
 
-        private void AddDirectory(object sender, RoutedEventArgs e)
+        private void Exit(object sender, RoutedEventArgs args)
+        {
+            if (MessageBox.Show("Are you sure that you want to exit this program?", "FsWatcher", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                Close();
+        }
+
+        private void Add(object sender, RoutedEventArgs args)
         {
             var dialog = new VistaFolderBrowserDialog();
             if (dialog.ShowDialog() == true)
-                LbDirectories.Items.Add(dialog.SelectedPath);
+                AddDir(dialog.SelectedPath);
+            DirUpdate(null, null);
         }
 
-        private void RemoveDirectory(object sender, RoutedEventArgs e)
+        private void AddDir(string path)
         {
-            if (LbDirectories.SelectedItem != null)
-                LbDirectories.Items.Remove(LbDirectories.SelectedItem);
+            var directories = LbDirectories.Items.OfType<string>();
+            var isDuplicate = false;
+            foreach (var directory in directories)
+                if (path.StartsWith(directory))
+                    isDuplicate = true;
+            if (isDuplicate)
+            {
+                MessageBox.Show("This directory or parent directory is already added to the list!", "FsWatcher", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                return;
+            }
+            LbDirectories.Items.Add(path);
         }
 
-        private void ClearDirectories(object sender, RoutedEventArgs e)
+        private void Remove(object sender, RoutedEventArgs args)
         {
+            if (BnRemove.IsEnabled == false)
+                return;
+            LbDirectories.Items.Remove(LbDirectories.SelectedItem);
+            DirUpdate(null, null);
+        }
+
+        private void Clear(object sender, RoutedEventArgs args)
+        {
+            if (BnRemove.IsEnabled == false)
+                return;
             LbDirectories.Items.Clear();
+            DirUpdate(null, null);
         }
 
-        private void DropDirectory(object sender, DragEventArgs e)
+        private void DirUpdate(object sender, SelectionChangedEventArgs args)
         {
-            if (!e.Data.GetDataPresent(DataFormats.FileDrop))
+            BnRemove.IsEnabled = LbDirectories.SelectedItem != null;
+            BnClear.IsEnabled = LbDirectories.Items.Count >= 1;
+            BnStart.IsEnabled = LbDirectories.Items.Count >= 1;
+        }
+
+        private void DirDrop(object sender, DragEventArgs args)
+        {
+            if (!args.Data.GetDataPresent(DataFormats.FileDrop))
                 return;
-            var items = e.Data.GetData(DataFormats.FileDrop) as string[];
+            if (!(args.Data.GetData(DataFormats.FileDrop) is string[] items))
+                return;
             foreach (var item in items)
-                if (Utilities.IsFileDirectory(item))
-                    LbDirectories.Items.Add(item);
-        }
-
-        private void CheckForUpdates(object sender, RoutedEventArgs e)
-        {
-            if (!Utilities.IsUserOnline())
-                return;
-            if (!Utilities.IsUpdateAvailable())
-                return;
-            var result = MessageBox.Show("Update is available! Do you want to visit the download page?", "FsWatcher", MessageBoxButton.YesNo);
-            if (result == MessageBoxResult.Yes)
-                Process.Start("https://github.com/dentolos19/FsWatcher/releases");
+                if (File.GetAttributes(item) == FileAttributes.Directory)
+                    AddDir(item);
+            DirUpdate(null, null);
         }
 
     }
