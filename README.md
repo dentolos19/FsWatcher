@@ -2,4 +2,4 @@
 
 This program basically just monitors directories and files for any changes made to them, this program is essential for people who wants to know how another program behaves in their computer. I made this project because of my personal hobby of creating anything that comes to mind! Any contributions to this project will be much help, thanks!
 
-![Preview](https://dentolos19.github.io/previews/fswatcher.png)
+![Preview](https://dentolos19.github.io/images/fswatcher.png)
