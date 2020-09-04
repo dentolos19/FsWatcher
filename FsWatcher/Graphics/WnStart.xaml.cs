@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Ookii.Dialogs.Wpf;
@@ -14,13 +13,13 @@ namespace FsWatcher.Graphics
     public partial class WnStart
     {
 
-        public string[] Directories { get; private set; }
-
         public WnStart()
         {
             InitializeComponent();
             RemoveButton.IsEnabled = false;
         }
+
+        public string[] Directories { get; private set; }
 
         private void Start(object sender, RoutedEventArgs args)
         {
