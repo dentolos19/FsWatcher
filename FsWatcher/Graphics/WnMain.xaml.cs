@@ -18,8 +18,9 @@ namespace FsWatcher.Graphics
     public partial class WnMain
     {
 
-        private bool _isRunning;
         private bool _isPaused;
+
+        private bool _isRunning;
         private FileSystemWatcher[] _watchers;
 
         public WnMain()
@@ -56,22 +57,22 @@ namespace FsWatcher.Graphics
             foreach (var directory in dialog.Directories)
             {
                 var watcher = new FileSystemWatcher { Path = directory, IncludeSubdirectories = true };
-                watcher.Created += (from, parameters) => 
+                watcher.Created += (from, parameters) =>
                 {
                     var item = new ActivityItemBinding { FileName = Path.GetFileName(parameters.FullPath), FileLocation = parameters.FullPath, ActionType = "Created", ActivityTime = DateTime.Now };
                     Dispatcher.Invoke(() => { ActivityList.Items.Add(item); });
                 };
-                watcher.Changed += (from, parameters) => 
+                watcher.Changed += (from, parameters) =>
                 {
                     var item = new ActivityItemBinding { FileName = Path.GetFileName(parameters.FullPath), FileLocation = parameters.FullPath, ActionType = "Modified", ActivityTime = DateTime.Now };
                     Dispatcher.Invoke(() => { ActivityList.Items.Add(item); });
                 };
-                watcher.Renamed += (from, parameters) => 
+                watcher.Renamed += (from, parameters) =>
                 {
                     var item = new ActivityItemBinding { FileName = Path.GetFileName(parameters.FullPath), FileLocation = parameters.FullPath, ActionType = "Renamed", ActivityTime = DateTime.Now };
                     Dispatcher.Invoke(() => { ActivityList.Items.Add(item); });
                 };
-                watcher.Deleted += (from, parameters) => 
+                watcher.Deleted += (from, parameters) =>
                 {
                     var item = new ActivityItemBinding { FileName = Path.GetFileName(parameters.FullPath), FileLocation = parameters.FullPath, ActionType = "Removed", ActivityTime = DateTime.Now };
                     Dispatcher.Invoke(() => { ActivityList.Items.Add(item); });
