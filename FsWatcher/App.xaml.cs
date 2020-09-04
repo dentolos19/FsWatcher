@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using FsWatcher.Core;
+using System.Windows.Threading;
 using FsWatcher.Graphics;
 
 namespace FsWatcher
@@ -10,9 +10,13 @@ namespace FsWatcher
 
         private void Initialize(object sender, StartupEventArgs args)
         {
-            var accent = Utilities.GetRandomAccent();
-            Utilities.SetAppTheme(accent);
             new WnMain().Show();
+        }
+
+        private void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
+        {
+            args.Handled = true;
+            new WnException(args.Exception).ShowDialog();
         }
 
     }

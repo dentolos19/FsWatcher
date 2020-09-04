@@ -1,9 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using Ookii.Dialogs.Wpf;
+using FsWatcher.Core.Bindings;
+using Microsoft.Win32;
+using Newtonsoft.Json;
+using AdonisMessageBox = AdonisUI.Controls.MessageBox;
+using AdonisMessageBoxButton = AdonisUI.Controls.MessageBoxButton;
+using AdonisMessageBoxImage = AdonisUI.Controls.MessageBoxImage;
+using AdonisMessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
 namespace FsWatcher.Graphics
 {
@@ -11,82 +18,158 @@ namespace FsWatcher.Graphics
     public partial class WnMain
     {
 
+        private bool _isRunning;
+        private bool _isPaused;
+        private FileSystemWatcher[] _watchers;
+
         public WnMain()
         {
             InitializeComponent();
+            StopButton.IsEnabled = false;
+            RemoveButton.IsEnabled = false;
         }
 
         private void Start(object sender, RoutedEventArgs args)
         {
-            if (BnStart.IsEnabled == false)
-                return;
-            var directories = LbDirectories.Items.OfType<string>();
-            new WnWatch(directories.ToArray()).Show();
-            Close();
-        }
-
-        private void Exit(object sender, RoutedEventArgs args)
-        {
-            if (MessageBox.Show("Are you sure that you want to exit this program?", "FsWatcher", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                Close();
-        }
-
-        private void Add(object sender, RoutedEventArgs args)
-        {
-            var dialog = new VistaFolderBrowserDialog();
-            if (dialog.ShowDialog() == true)
-                AddDir(dialog.SelectedPath);
-            DirUpdate(null, null);
-        }
-
-        private void AddDir(string path)
-        {
-            var directories = LbDirectories.Items.OfType<string>();
-            var isDuplicate = false;
-            foreach (var directory in directories)
-                if (string.Equals(directory, path, StringComparison.CurrentCultureIgnoreCase))
-                    isDuplicate = true;
-            if (isDuplicate)
+            if (_isRunning)
             {
-                MessageBox.Show("This directory is already added to the list!", "FsWatcher", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                if (_isPaused)
+                {
+                    foreach (var watcher in _watchers)
+                        watcher.EnableRaisingEvents = true;
+                    StartButton.Content = "Pause Monitoring";
+                    _isPaused = false;
+                }
+                else
+                {
+                    foreach (var watcher in _watchers)
+                        watcher.EnableRaisingEvents = false;
+                    StartButton.Content = "Resume Monitoring";
+                    _isPaused = true;
+                }
                 return;
             }
-            LbDirectories.Items.Add(path);
+            var dialog = new WnStart { Owner = this };
+            if (dialog.ShowDialog() != true)
+                return;
+            var watchers = new List<FileSystemWatcher>();
+            foreach (var directory in dialog.Directories)
+            {
+                var watcher = new FileSystemWatcher { Path = directory, IncludeSubdirectories = true };
+                watcher.Created += (from, parameters) => 
+                {
+                    var item = new ActivityItemBinding { FileName = Path.GetFileName(parameters.FullPath), FileLocation = parameters.FullPath, ActionType = "Created", ActivityTime = DateTime.Now };
+                    Dispatcher.Invoke(() => { ActivityList.Items.Add(item); });
+                };
+                watcher.Changed += (from, parameters) => 
+                {
+                    var item = new ActivityItemBinding { FileName = Path.GetFileName(parameters.FullPath), FileLocation = parameters.FullPath, ActionType = "Modified", ActivityTime = DateTime.Now };
+                    Dispatcher.Invoke(() => { ActivityList.Items.Add(item); });
+                };
+                watcher.Renamed += (from, parameters) => 
+                {
+                    var item = new ActivityItemBinding { FileName = Path.GetFileName(parameters.FullPath), FileLocation = parameters.FullPath, ActionType = "Renamed", ActivityTime = DateTime.Now };
+                    Dispatcher.Invoke(() => { ActivityList.Items.Add(item); });
+                };
+                watcher.Deleted += (from, parameters) => 
+                {
+                    var item = new ActivityItemBinding { FileName = Path.GetFileName(parameters.FullPath), FileLocation = parameters.FullPath, ActionType = "Removed", ActivityTime = DateTime.Now };
+                    Dispatcher.Invoke(() => { ActivityList.Items.Add(item); });
+                };
+                watchers.Add(watcher);
+            }
+            _watchers = watchers.ToArray();
+            foreach (var watcher in _watchers)
+                watcher.EnableRaisingEvents = true;
+            StartButton.Content = "Pause Monitoring";
+            StopButton.IsEnabled = true;
+            _isRunning = true;
+        }
+
+        private void Stop(object sender, RoutedEventArgs args)
+        {
+            if (!_isRunning)
+                return;
+            foreach (var watcher in _watchers)
+            {
+                watcher.EnableRaisingEvents = false;
+                watcher.Dispose();
+            }
+            _isPaused = false;
+            _isRunning = false;
+            StartButton.Content = "Start Monitoring";
+            StopButton.IsEnabled = false;
         }
 
         private void Remove(object sender, RoutedEventArgs args)
         {
-            if (BnRemove.IsEnabled == false)
-                return;
-            LbDirectories.Items.Remove(LbDirectories.SelectedItem);
-            DirUpdate(null, null);
+            var answer = AdonisMessageBox.Show("Are you sure that you want to remove this monitored activity?", "FsWatcher", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
+            if (answer == AdonisMessageBoxResult.Yes)
+                ActivityList.Items.Remove(ActivityList.SelectedItem);
         }
 
         private void Clear(object sender, RoutedEventArgs args)
         {
-            if (BnRemove.IsEnabled == false)
+            if (!(ActivityList.Items.Count >= 1))
                 return;
-            LbDirectories.Items.Clear();
-            DirUpdate(null, null);
+            var answer = AdonisMessageBox.Show("Are you sure that you want to clear all monitored activities?", "FsWatcher", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
+            if (answer == AdonisMessageBoxResult.Yes)
+                ActivityList.Items.Clear();
         }
 
-        private void DirUpdate(object sender, SelectionChangedEventArgs args)
+        private void Save(object sender, RoutedEventArgs args)
         {
-            BnRemove.IsEnabled = LbDirectories.SelectedItem != null;
-            BnClear.IsEnabled = LbDirectories.Items.Count >= 1;
-            BnStart.IsEnabled = LbDirectories.Items.Count >= 1;
+            if (_isRunning)
+            {
+                AdonisMessageBox.Show("You can't save while the monitor is running!", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
+                return;
+            }
+            if (!(ActivityList.Items.Count >= 1))
+            {
+                AdonisMessageBox.Show("You must at least have one monitored activity in the list.", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
+                return;
+            }
+            var dialog = new SaveFileDialog { Filter = "FsWatcher Log|*.fsl" };
+            if (dialog.ShowDialog() != true)
+                return;
+            var items = ActivityList.Items.OfType<ActivityItemBinding>();
+            var data = JsonConvert.SerializeObject(items, Formatting.Indented);
+            File.WriteAllText(dialog.FileName, data);
+            AdonisMessageBox.Show("Saved activities into file!", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
         }
 
-        private void DirDrop(object sender, DragEventArgs args)
+        private void Load(object sender, RoutedEventArgs args)
         {
-            if (!args.Data.GetDataPresent(DataFormats.FileDrop))
+            if (_isRunning)
+            {
+                AdonisMessageBox.Show("You can't load while the monitor is running!", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
                 return;
-            if (!(args.Data.GetData(DataFormats.FileDrop) is string[] items))
+            }
+            var dialog = new OpenFileDialog { Filter = "FsWatcher Log|*.fsl" };
+            if (dialog.ShowDialog() != true)
                 return;
+            var data = File.ReadAllText(dialog.FileName);
+            var items = JsonConvert.DeserializeObject<IEnumerable<ActivityItemBinding>>(data);
+            ActivityList.Items.Clear();
             foreach (var item in items)
-                if (File.GetAttributes(item) == FileAttributes.Directory)
-                    AddDir(item);
-            DirUpdate(null, null);
+                ActivityList.Items.Add(item);
+            AdonisMessageBox.Show("Loaded activities from file!", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
+        }
+
+        private void Exit(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+        }
+
+        private void UpdateActivitySelection(object sender, SelectionChangedEventArgs args)
+        {
+            RemoveButton.IsEnabled = ActivityList.SelectedItem != null;
+        }
+
+        private void CopyFileLocation(object sender, RoutedEventArgs args)
+        {
+            if (ActivityList.SelectedItem != null)
+                Clipboard.SetText(((ActivityItemBinding)ActivityList.SelectedItem).FileLocation);
         }
 
     }

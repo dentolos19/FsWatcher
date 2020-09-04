@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsWatcher", "FsWatcher\FsWatcher.csproj", "{2C5F9F1F-D824-41EE-9608-6411C63174B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsWatcher", "FsWatcher\FsWatcher.csproj", "{92192940-18FB-4A40-8C21-5FDE70AD4E10}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2C5F9F1F-D824-41EE-9608-6411C63174B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2C5F9F1F-D824-41EE-9608-6411C63174B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2C5F9F1F-D824-41EE-9608-6411C63174B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2C5F9F1F-D824-41EE-9608-6411C63174B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92192940-18FB-4A40-8C21-5FDE70AD4E10}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92192940-18FB-4A40-8C21-5FDE70AD4E10}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92192940-18FB-4A40-8C21-5FDE70AD4E10}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92192940-18FB-4A40-8C21-5FDE70AD4E10}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {B0F9DB99-6248-4315-81A6-D907132D0846}
+		SolutionGuid = {FB853A9B-BB7D-4A54-BAED-007E569605D6}
 	EndGlobalSection
 EndGlobal
