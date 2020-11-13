@@ -1,13 +1,16 @@
-# FsWatcher (Migrated to [Common Tools Online](https://github.com/dentolos19/CommonToolsOnline))
+<h1 align="center">
+  <br>
+    <img src="./.github/icon.png" width="200">
+  <br>
+    FsWatcher
+  <br>
+</h1>
 
-This program basically just monitors directories and files for any changes, this program is useful for people who wants to know how another program behaves and modifies your files. I made this project just for the learning experience!
-
-![Preview](https://dentolos19.github.io/previews/fswatcher.png)
-
-### Contributing
-
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-### License
-
-This project is licensed with the [MIT License](https://choosealicense.com/licenses/mit).
+<p align="center">
+  <a href="https://dotnet.microsoft.com">
+    <img src="https://img.shields.io/badge/Powered%20By-.NET-blue?logo=microsoft&style=for-the-badge">
+  </a>
+  <a href="https://visualstudio.microsoft.com">
+    <img src="https://img.shields.io/badge/Made%20With-Visual%20Studio-blue?logo=visual-studio&style=for-the-badge">
+  </a>
+</p>
