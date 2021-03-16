@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Windows;
-using FsWatcher.Core;
+using WxMonitor.Core;
 
-namespace FsWatcher.Graphics
+namespace WxMonitor.Graphics
 {
 
     public partial class WnException

@@ -7,7 +7,7 @@ using AdonisMessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using AdonisMessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 using AdonisMessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
-namespace FsWatcher.Graphics
+namespace WxMonitor.Graphics
 {
 
     public partial class WnStart
@@ -25,7 +25,7 @@ namespace FsWatcher.Graphics
         {
             if (!(DirectoryList.Items.Count >= 1))
             {
-                AdonisMessageBox.Show("You must at least have one directory in the list!", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Stop);
+                AdonisMessageBox.Show("You must at least have one directory in the list!", "WxMonitor", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Stop);
                 return;
             }
             Directories = DirectoryList.Items.OfType<string>().ToArray();
@@ -45,7 +45,7 @@ namespace FsWatcher.Graphics
                 return;
             if (DirectoryList.Items.OfType<string>().Any(directory => directory == dialog.SelectedPath))
             {
-                AdonisMessageBox.Show("The directory is already in the list.", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
+                AdonisMessageBox.Show("The directory is already in the list.", "WxMonitor", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
                 return;
             }
             DirectoryList.Items.Add(dialog.SelectedPath);
@@ -53,7 +53,7 @@ namespace FsWatcher.Graphics
 
         private void Remove(object sender, RoutedEventArgs args)
         {
-            var answer = AdonisMessageBox.Show("Are you sure that you want remove this directory?", "FsWatcher", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
+            var answer = AdonisMessageBox.Show("Are you sure that you want remove this directory?", "WxMonitor", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
             if (answer == AdonisMessageBoxResult.Yes)
                 DirectoryList.Items.Remove(DirectoryList.SelectedItem);
         }
@@ -62,7 +62,7 @@ namespace FsWatcher.Graphics
         {
             if (!(DirectoryList.Items.Count >= 1))
                 return;
-            var answer = AdonisMessageBox.Show("Are you sure that you want to clear all directories?", "FsWatcher", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
+            var answer = AdonisMessageBox.Show("Are you sure that you want to clear all directories?", "WxMonitor", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
             if (answer == AdonisMessageBoxResult.Yes)
                 DirectoryList.Items.Clear();
         }

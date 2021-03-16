@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FsWatcher.Core.Bindings
+namespace WxMonitor.Core.Bindings
 {
 
     public class ActivityItemBinding

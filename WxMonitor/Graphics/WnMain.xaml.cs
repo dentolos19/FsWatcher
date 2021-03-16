@@ -4,15 +4,15 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using FsWatcher.Core.Bindings;
 using Microsoft.Win32;
 using Newtonsoft.Json;
+using WxMonitor.Core.Bindings;
 using AdonisMessageBox = AdonisUI.Controls.MessageBox;
 using AdonisMessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using AdonisMessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 using AdonisMessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
-namespace FsWatcher.Graphics
+namespace WxMonitor.Graphics
 {
 
     public partial class WnMain
@@ -104,7 +104,7 @@ namespace FsWatcher.Graphics
 
         private void Remove(object sender, RoutedEventArgs args)
         {
-            var answer = AdonisMessageBox.Show("Are you sure that you want to remove this monitored activity?", "FsWatcher", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
+            var answer = AdonisMessageBox.Show("Are you sure that you want to remove this monitored activity?", "WxMonitor", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
             if (answer == AdonisMessageBoxResult.Yes)
                 ActivityList.Items.Remove(ActivityList.SelectedItem);
         }
@@ -113,7 +113,7 @@ namespace FsWatcher.Graphics
         {
             if (!(ActivityList.Items.Count >= 1))
                 return;
-            var answer = AdonisMessageBox.Show("Are you sure that you want to clear all monitored activities?", "FsWatcher", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
+            var answer = AdonisMessageBox.Show("Are you sure that you want to clear all monitored activities?", "WxMonitor", AdonisMessageBoxButton.YesNo, AdonisMessageBoxImage.Question);
             if (answer == AdonisMessageBoxResult.Yes)
                 ActivityList.Items.Clear();
         }
@@ -122,31 +122,31 @@ namespace FsWatcher.Graphics
         {
             if (_isRunning)
             {
-                AdonisMessageBox.Show("You can't save while the monitor is running!", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
+                AdonisMessageBox.Show("You can't save while the monitor is running!", "WxMonitor", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
                 return;
             }
             if (!(ActivityList.Items.Count >= 1))
             {
-                AdonisMessageBox.Show("You must at least have one monitored activity in the list.", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
+                AdonisMessageBox.Show("You must at least have one monitored activity in the list.", "WxMonitor", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
                 return;
             }
-            var dialog = new SaveFileDialog { Filter = "FsWatcher Log|*.fsl" };
+            var dialog = new SaveFileDialog { Filter = "WxMonitor Log|*.fsl" };
             if (dialog.ShowDialog() != true)
                 return;
             var items = ActivityList.Items.OfType<ActivityItemBinding>();
             var data = JsonConvert.SerializeObject(items, Formatting.Indented);
             File.WriteAllText(dialog.FileName, data);
-            AdonisMessageBox.Show("Saved activities into file!", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
+            AdonisMessageBox.Show("Saved activities into file!", "WxMonitor", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
         }
 
         private void Load(object sender, RoutedEventArgs args)
         {
             if (_isRunning)
             {
-                AdonisMessageBox.Show("You can't load while the monitor is running!", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
+                AdonisMessageBox.Show("You can't load while the monitor is running!", "WxMonitor", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
                 return;
             }
-            var dialog = new OpenFileDialog { Filter = "FsWatcher Log|*.fsl" };
+            var dialog = new OpenFileDialog { Filter = "WxMonitor Log|*.fsl" };
             if (dialog.ShowDialog() != true)
                 return;
             var data = File.ReadAllText(dialog.FileName);
@@ -154,7 +154,7 @@ namespace FsWatcher.Graphics
             ActivityList.Items.Clear();
             foreach (var item in items)
                 ActivityList.Items.Add(item);
-            AdonisMessageBox.Show("Loaded activities from file!", "FsWatcher", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
+            AdonisMessageBox.Show("Loaded activities from file!", "WxMonitor", AdonisMessageBoxButton.OK, AdonisMessageBoxImage.Information);
         }
 
         private void Exit(object sender, RoutedEventArgs e)

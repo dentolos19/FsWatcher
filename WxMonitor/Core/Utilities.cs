@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Windows;
 
-namespace FsWatcher.Core
+namespace WxMonitor.Core
 {
 
     public static class Utilities

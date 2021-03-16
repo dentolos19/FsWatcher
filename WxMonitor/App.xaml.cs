@@ -1,8 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Threading;
-using FsWatcher.Graphics;
+using WxMonitor.Graphics;
 
-namespace FsWatcher
+namespace WxMonitor
 {
 
     public partial class App
