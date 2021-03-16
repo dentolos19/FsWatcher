@@ -33,6 +33,7 @@
             </ListView.View>
             <ListView.ContextMenu>
                 <ContextMenu>
+                    <MenuItem Header="Copy File Name" Click="CopyFileName"/>
                     <MenuItem Header="Copy File Location" Click="CopyFileLocation"/>
                 </ContextMenu>
             </ListView.ContextMenu>

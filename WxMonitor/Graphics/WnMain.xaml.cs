@@ -167,6 +167,12 @@ namespace WxMonitor.Graphics
             RemoveButton.IsEnabled = ActivityList.SelectedItem != null;
         }
 
+        private void CopyFileName(object sender, RoutedEventArgs args)
+        {
+            if (ActivityList.SelectedItem != null)
+                Clipboard.SetText(((ActivityItemBinding)ActivityList.SelectedItem).FileName);
+        }
+        
         private void CopyFileLocation(object sender, RoutedEventArgs args)
         {
             if (ActivityList.SelectedItem != null)

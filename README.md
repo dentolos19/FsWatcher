@@ -12,3 +12,7 @@
 [![](https://img.shields.io/badge/Made%20With-Rider-blue?logo=jetbrains&style=flat-square)](https://www.jetbrains.com/rider)
 
 </div>
+
+## Screenshots
+
+![](./.github/screenshots/0.png)
