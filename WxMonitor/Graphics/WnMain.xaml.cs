@@ -50,7 +50,7 @@ namespace WxMonitor.Graphics
                 }
                 return;
             }
-            var dialog = new WnStart { Owner = this };
+            var dialog = new WnConfigureMonitor { Owner = this };
             if (dialog.ShowDialog() != true)
                 return;
             var watchers = new List<FileSystemWatcher>();
@@ -172,7 +172,7 @@ namespace WxMonitor.Graphics
             if (ActivityList.SelectedItem != null)
                 Clipboard.SetText(((ActivityItemBinding)ActivityList.SelectedItem).FileName);
         }
-        
+
         private void CopyFileLocation(object sender, RoutedEventArgs args)
         {
             if (ActivityList.SelectedItem != null)

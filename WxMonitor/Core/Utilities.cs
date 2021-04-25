@@ -10,7 +10,7 @@ namespace WxMonitor.Core
     public static class Utilities
     {
 
-        public static void RestartApp(string args = null)
+        public static void RestartApp(string? args = null)
         {
             var location = Assembly.GetExecutingAssembly().Location;
             if (location.EndsWith(".dll", StringComparison.CurrentCultureIgnoreCase))

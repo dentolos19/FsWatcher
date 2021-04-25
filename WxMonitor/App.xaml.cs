@@ -16,7 +16,7 @@ namespace WxMonitor
         private void HandleException(object sender, DispatcherUnhandledExceptionEventArgs args)
         {
             args.Handled = true;
-            new WnException(args.Exception).ShowDialog();
+            new WnExceptionHandler(args.Exception).ShowDialog();
         }
 
     }

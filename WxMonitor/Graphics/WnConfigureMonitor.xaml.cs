@@ -10,10 +10,10 @@ using AdonisMessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 namespace WxMonitor.Graphics
 {
 
-    public partial class WnStart
+    public partial class WnConfigureMonitor
     {
 
-        public WnStart()
+        public WnConfigureMonitor()
         {
             InitializeComponent();
             RemoveButton.IsEnabled = false;

@@ -5,10 +5,10 @@ using WxMonitor.Core;
 namespace WxMonitor.Graphics
 {
 
-    public partial class WnException
+    public partial class WnExceptionHandler
     {
 
-        public WnException(Exception error)
+        public WnExceptionHandler(Exception error)
         {
             InitializeComponent();
             MessageText.Text = error.Message;
